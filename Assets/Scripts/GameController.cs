@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,7 +31,9 @@ public class GameController : MonoBehaviour
                     bool isGameOver = cubeSpawner.CurrentCube.Arrangement();
                     if(isGameOver)
                     {
-                        Debug.Log("GameOver");
+                        OnGameOver();
+
+                        yield break;
                     }
 
                     // 현재 점수 증가 및 게임 화면에 점수 정보 갱신
@@ -43,6 +46,38 @@ public class GameController : MonoBehaviour
 
                 // 이동 큐브 생성
                 cubeSpawner.SpawnCube();
+            }
+
+            yield return null;
+        }
+    }
+
+    private void OnGameOver()
+    {
+        int highScore = PlayerPrefs.GetInt("HighScore");
+
+        if(highScore < currentScore)
+        {
+            PlayerPrefs.SetInt("HighScore", currentScore);
+            uiController.GameOver(true);
+        }
+        else
+        {
+            uiController.GameOver(false);
+        }
+
+        StartCoroutine("AfterGameOver");
+    }
+
+    private IEnumerator AfterGameOver()
+    {
+        yield return new WaitForEndOfFrame();
+
+        while(true)
+        {
+            if(Input.GetMouseButtonDown(0))
+            {
+                UnityEngine.SceneManagement.SceneManager.LoadScene(0);
             }
 
             yield return null;
