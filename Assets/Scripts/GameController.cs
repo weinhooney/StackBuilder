@@ -16,6 +16,21 @@ public class GameController : MonoBehaviour
     {
         while(true)
         {
+            // Perfect 테스트용
+            if(Input.GetMouseButtonDown(1))
+            {
+                if(null != cubeSpawner.CurrentCube)
+                {
+                    cubeSpawner.CurrentCube.transform.position = cubeSpawner.LastCube.position + Vector3.up * 0.1f;
+                    cubeSpawner.CurrentCube.Arrangement();
+                    currentScore++;
+                    uiController.UpdateScore(currentScore);
+                }
+
+                cameraController.MoveOneStep();
+                cubeSpawner.SpawnCube();
+            }
+
             if(Input.GetMouseButtonDown(0))
             {
                 // 게임 시작 후 처음 마우스 왼쪽 버튼을 눌렀을 때 1회만 호출
@@ -31,7 +46,8 @@ public class GameController : MonoBehaviour
                     bool isGameOver = cubeSpawner.CurrentCube.Arrangement();
                     if(isGameOver)
                     {
-                        OnGameOver();
+                        // GameOverAnimation 재생이 완료된 이후에 OnGameOver() 호출
+                        cameraController.GameOverAnimation(cubeSpawner.LastCube.position.y, OnGameOver);
 
                         yield break;
                     }

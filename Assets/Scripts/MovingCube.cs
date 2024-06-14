@@ -10,10 +10,12 @@ public class MovingCube : MonoBehaviour
 
     private CubeSpawner cubeSpawner;
     private MoveAxis moveAxis;
+    private PerfectController perfectController;
 
-    public void Setup(CubeSpawner cubeSpawner, MoveAxis moveAxis)
+    public void Setup(CubeSpawner cubeSpawner, PerfectController perfectController, MoveAxis moveAxis)
     {
         this.cubeSpawner = cubeSpawner;
+        this.perfectController = perfectController;
         this.moveAxis = moveAxis;
 
         if(MoveAxis.x == moveAxis)
@@ -66,15 +68,22 @@ public class MovingCube : MonoBehaviour
             return true;
         }
 
-        float direction = 0 <= hangOver ? 1 : -1;
+        // 퍼펙트 여부 검사
+        bool isPerfect = perfectController.IsPerfect(hangOver);
 
-        if(MoveAxis.x == moveAxis)
+        // isPerfect가 false일 때만 조각 큐브 생성
+        if(false == isPerfect)
         {
-            SplitCubeOnX(hangOver, direction);
-        }
-        else if(MoveAxis.z == moveAxis)
-        {
-            SplitCubeOnZ(hangOver, direction);
+            float direction = 0 <= hangOver ? 1 : -1;
+
+            if (MoveAxis.x == moveAxis)
+            {
+                SplitCubeOnX(hangOver, direction);
+            }
+            else if (MoveAxis.z == moveAxis)
+            {
+                SplitCubeOnZ(hangOver, direction);
+            }
         }
 
         // 현재 이동중인 큐브를 정지해서 배치했기 때문에 배치되어 있는 큐브 중

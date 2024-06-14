@@ -5446,6 +5446,52 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &470078685
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 470078687}
+  - component: {fileID: 470078686}
+  m_Layer: 0
+  m_Name: PerfectController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &470078686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 470078685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f324295ceb0ddd24a890bc51f48757f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cubeSpawner: {fileID: 1800613160}
+  perfectEffect: {fileID: 178090404062550980, guid: 79c2492f2142c7341befeb6b5c1c3a81, type: 3}
+--- !u!4 &470078687
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 470078685}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -5813,6 +5859,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveDistance: 0.1
   oneStepMoveTime: 0.25
+  gameOverAnimationTime: 1.5
+  limitMinY: 4
 --- !u!1 &1094275680
 GameObject:
   m_ObjectHideFlags: 0
@@ -6458,6 +6506,7 @@ MonoBehaviour:
   - {fileID: 1125912219}
   - {fileID: 839246311}
   movingCubePrefab: {fileID: 7879589725640451706, guid: 3ea7aacdf40296a499d030f6cae7004d, type: 3}
+  perfectController: {fileID: 470078686}
   <LastCube>k__BackingField: {fileID: 55370457}
   colorWeight: 15
 --- !u!4 &1800613161
@@ -6676,3 +6725,4 @@ SceneRoots:
   - {fileID: 234766642}
   - {fileID: 2071881842}
   - {fileID: 1177062167}
+  - {fileID: 470078687}

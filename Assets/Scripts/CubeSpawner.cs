@@ -9,6 +9,7 @@ public class CubeSpawner : MonoBehaviour
 {
     [SerializeField] private Transform[] cubeSpawnPoints; // 큐브 생성 위치(x, z)
     [SerializeField] private Transform movingCubePrefab; // 이동 큐브 프리팹
+    [SerializeField] PerfectController perfectController;
 
     // 새로운 큐브 생성에 필요한 위치/크기 정보, 조각 큐브 제작, 게임오버 감사 등에 사용
     [field: SerializeField] public Transform LastCube { get; set; } // 마지막에 생성한 큐브 정보
@@ -57,7 +58,7 @@ public class CubeSpawner : MonoBehaviour
         clone.GetComponent<MeshRenderer>().material.color = GetRandomColor();
 
         // 방금 생성한 이동 큐브의 Setup() 메소드 호출(이동방향 전달)
-        clone.GetComponent<MovingCube>().Setup(this, moveAxis);
+        clone.GetComponent<MovingCube>().Setup(this, perfectController, moveAxis);
 
         // cubeSpawnPoints 배열의 인덱스 변경
         moveAxis = (MoveAxis)(((int)moveAxis + 1) % cubeSpawnPoints.Length);
