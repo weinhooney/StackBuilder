@@ -188,4 +188,26 @@ public class MovingCube : MonoBehaviour
 
         return false;
     }
+
+    public void RecoveryCube()
+    {
+        float recoverySize = 0.1f;
+
+        if(MoveAxis.x == moveAxis)
+        {
+            float newXSize = transform.localScale.x + recoverySize;
+            float newXPosition = transform.position.x + recoverySize * 0.5f;
+
+            transform.position = new Vector3(newXPosition, transform.position.y, transform.position.z);
+            transform.localScale = new Vector3(newXSize, transform.localScale.y, transform.localScale.z);
+        }
+        else
+        {
+            float newZSize = transform.localScale.z + recoverySize;
+            float newZPosition = transform.position.z + recoverySize * 0.5f;
+
+            transform.position = new Vector3(transform.position.x, transform.position.y, newZPosition);
+            transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, newZSize);
+        }
+    }
 }
