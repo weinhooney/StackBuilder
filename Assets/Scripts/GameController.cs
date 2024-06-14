@@ -9,6 +9,7 @@ public class GameController : MonoBehaviour
     [SerializeField] UIController uiController;
 
     private bool isGameStart = false;
+    private int currentScore = 0;
 
     private IEnumerator Start()
     {
@@ -31,6 +32,10 @@ public class GameController : MonoBehaviour
                     {
                         Debug.Log("GameOver");
                     }
+
+                    // 현재 점수 증가 및 게임 화면에 점수 정보 갱신
+                    currentScore++;
+                    uiController.UpdateScore(currentScore);
                 }
 
                 // 카메라의 y위치를 이동 큐브 y크기만큼 이동
