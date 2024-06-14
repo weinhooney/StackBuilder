@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum MoveAxis { x = 0, z }
+
 public class CubeSpawner : MonoBehaviour
 {
     [SerializeField] private Transform[] cubeSpawnPoints; // 큐브 생성 위치(x, z)
@@ -17,13 +19,38 @@ public class CubeSpawner : MonoBehaviour
     private int currentColorNumberOfTime = 5;
     private int maxColorNumberOfTIme = 5;
 
+    private MoveAxis moveAxis = MoveAxis.x; // 현재 이동 축
+
     public void SpawnCube()
     {
         // 이동 큐브 생성
         Transform clone = Instantiate(movingCubePrefab);
 
+        // 방금 생성한 이동 큐브의 위치
+        // LastCube가 "StartCubeTop"인 경우는 게임을 시작하고 첫 이동 큐브를 생성할 때임
+        if(null == LastCube || LastCube.name.Equals("StartCubeTop"))
+        {
+            // cubeSpawnPoints의 위치를 그대로 사용
+            clone.position = cubeSpawnPoints[(int)moveAxis].position;
+        }
+        else
+        {
+            // 위치 설정
+            float x = cubeSpawnPoints[(int)moveAxis].position.x;
+            float z = cubeSpawnPoints[(int)moveAxis].position.z;
+
+            // y축의 경우 LastCube 위치 + 프리팹의 y크기로 설정해 마지막으로 생성한 큐브보다 프리팹의 y크기만큼 더 높게 설정
+            float y = LastCube.position.y + movingCubePrefab.localScale.y;
+
+            clone.position = new Vector3(x, y, z);
+        }
+
+
         // 방금 생성한 이동 큐브의 색상
         clone.GetComponent<MeshRenderer>().material.color = GetRandomColor();
+
+        // cubeSpawnPoints 배열의 인덱스 변경
+        moveAxis = (MoveAxis)(((int)moveAxis + 1) % cubeSpawnPoints.Length);
 
         // 방금 생성한 이동 큐브의 정보를 LastCube에 저장
         LastCube = clone;
