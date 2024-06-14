@@ -6,6 +6,7 @@ public class PerfectController : MonoBehaviour
 {
     [SerializeField] private CubeSpawner cubeSpawner;
     [SerializeField] private Transform perfectEffect;
+    [SerializeField] private Transform perfectComboEffect;
 
     private AudioSource audioSource;
 
@@ -40,12 +41,6 @@ public class PerfectController : MonoBehaviour
 
     private void EffectProcess()
     {
-        // 기본 퍼펙트 이펙트 생성
-        OnPerfectEffect();
-    }
-
-    private void OnPerfectEffect()
-    {
         // 이펙트 생성 위치
         Vector3 position = cubeSpawner.LastCube.position;
         position.y = cubeSpawner.CurrentCube.transform.position.y - cubeSpawner.CurrentCube.transform.localScale.y * 0.5f;
@@ -54,6 +49,18 @@ public class PerfectController : MonoBehaviour
         Vector3 scale = cubeSpawner.CurrentCube.transform.localScale;
         scale = new Vector3(scale.x + addedSize, perfectEffect.localScale.y, scale.z + addedSize);
 
+        // 기본 퍼펙트 이펙트 생성
+        OnPerfectEffect(position, scale);
+
+        if(0 < perfectCombo && perfectCombo < 5)
+        {
+            // 콤보 이펙트 이펙트 생성
+            StartCoroutine(OnPerfectComboEffect(position, scale));
+        }
+    }
+
+    private void OnPerfectEffect(Vector3 position, Vector3 scale)
+    {
         // 이펙트 생성
         Transform effect = Instantiate(perfectEffect);
         effect.position = position;
@@ -76,5 +83,32 @@ public class PerfectController : MonoBehaviour
         }
 
         audioSource.Play();
+    }
+
+    private IEnumerator OnPerfectComboEffect(Vector3 position, Vector3 scale)
+    {
+        // 이펙트 재생
+        // 콤보가 중첩될 때마다 개수 추가
+        int currentCombo = 0;
+        float beginTime = Time.time;
+        float duration = 0.15f;
+
+        while(currentCombo < perfectCombo)
+        {
+            float t = (Time.time - beginTime) / duration;
+            if(1 <= t)
+            {
+                // 이펙트 생성
+                Transform effect = Instantiate(perfectComboEffect);
+                effect.position = position;
+                effect.localScale = scale;
+
+                beginTime = Time.time;
+
+                currentCombo++;
+            }
+
+            yield return null;
+        }
     }
 }
