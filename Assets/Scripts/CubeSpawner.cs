@@ -13,6 +13,8 @@ public class CubeSpawner : MonoBehaviour
     // 새로운 큐브 생성에 필요한 위치/크기 정보, 조각 큐브 제작, 게임오버 감사 등에 사용
     [field: SerializeField] public Transform LastCube { get; set; } // 마지막에 생성한 큐브 정보
 
+    public MovingCube CurrentCube { get; set; } = null; // 현재 이동중인 큐브
+
     [SerializeField] private float colorWeight = 15.0f; // 색상의 비슷한 정도(값이 작을수록 더 비슷한 색상)
 
     // 완전히 새로운 색상으로 변경하기 위한 현재 횟수, 최대 횟수
@@ -36,8 +38,11 @@ public class CubeSpawner : MonoBehaviour
         else
         {
             // 위치 설정
-            float x = cubeSpawnPoints[(int)moveAxis].position.x;
-            float z = cubeSpawnPoints[(int)moveAxis].position.z;
+            //float x = cubeSpawnPoints[(int)moveAxis].position.x;
+            //float z = cubeSpawnPoints[(int)moveAxis].position.z;
+
+            float x = MoveAxis.x == moveAxis ? cubeSpawnPoints[(int)moveAxis].position.x : LastCube.position.x;
+            float z = MoveAxis.z == moveAxis ? cubeSpawnPoints[(int)moveAxis].position.z : LastCube.position.z;
 
             // y축의 경우 LastCube 위치 + 프리팹의 y크기로 설정해 마지막으로 생성한 큐브보다 프리팹의 y크기만큼 더 높게 설정
             float y = LastCube.position.y + movingCubePrefab.localScale.y;
@@ -45,15 +50,23 @@ public class CubeSpawner : MonoBehaviour
             clone.position = new Vector3(x, y, z);
         }
 
+        // 방금 생성한 이동 큐브의 크기
+        clone.localScale = new Vector3(LastCube.localScale.x, movingCubePrefab.localScale.y, LastCube.localScale.z);
 
         // 방금 생성한 이동 큐브의 색상
         clone.GetComponent<MeshRenderer>().material.color = GetRandomColor();
+
+        // 방금 생성한 이동 큐브의 Setup() 메소드 호출(이동방향 전달)
+        clone.GetComponent<MovingCube>().Setup(this, moveAxis);
 
         // cubeSpawnPoints 배열의 인덱스 변경
         moveAxis = (MoveAxis)(((int)moveAxis + 1) % cubeSpawnPoints.Length);
 
         // 방금 생성한 이동 큐브의 정보를 LastCube에 저장
-        LastCube = clone;
+        //LastCube = clone;
+
+        // 방금 생성한 이동 큐브의 정보를 CurrentCube에 저장
+        CurrentCube = clone.GetComponent<MovingCube>();
     }
 
     private void OnDrawGizmos()
